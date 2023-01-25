@@ -3,6 +3,12 @@ use crate::{
     value::Value,
 };
 
+pub fn print_value(value: &Value) {
+    match value {
+        Value::Number(n) => print!("number: {:?}", n),
+    }
+}
+
 pub fn disassemble_chunk(chunk: &Chunk, name: &str) {
     println!("== {} ==", name);
 
@@ -12,7 +18,7 @@ pub fn disassemble_chunk(chunk: &Chunk, name: &str) {
     }
 }
 
-fn disassemble_instruction(chunk: &Chunk, offset: usize) -> usize {
+pub fn disassemble_instruction(chunk: &Chunk, offset: usize) -> usize {
     print!("{:04} ", offset);
 
     if offset > 0 && chunk.lines[offset] == chunk.lines[offset - 1] {
@@ -24,10 +30,13 @@ fn disassemble_instruction(chunk: &Chunk, offset: usize) -> usize {
     let instruction = &chunk.code[offset];
 
     match instruction {
-        OpCode::Return => simple_instruction("OP_RETURN", offset),
-        OpCode::Constant(index) => {
-            constant_instruction("OP_CONSTANT", chunk, offset, (*index).into())
-        }
+        OpCode::Return => simple_instruction("RETURN", offset),
+        OpCode::Constant(index) => constant_instruction("CONSTANT", chunk, offset, (*index).into()),
+        OpCode::Negate => simple_instruction("NEGATE", offset),
+        OpCode::Add => simple_instruction("ADD", offset),
+        OpCode::Subtract => simple_instruction("SUBTRACT", offset),
+        OpCode::Multiply => simple_instruction("MULTIPLY", offset),
+        OpCode::Divide => simple_instruction("DIVIDE", offset),
     }
 }
 
@@ -41,10 +50,4 @@ fn constant_instruction(name: &str, chunk: &Chunk, offset: usize, index: usize) 
     print_value(&chunk.constants.values[index]);
     println!("'");
     offset + 1
-}
-
-fn print_value(value: &Value) {
-    match value {
-        Value::Number(n) => print!("number: {:?}", n),
-    }
 }

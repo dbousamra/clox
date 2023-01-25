@@ -3,6 +3,11 @@ use crate::value::{Value, ValuePool};
 pub enum OpCode {
     Return,
     Constant(u8), // index into the constant pool
+    Negate,
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
 }
 
 pub struct Chunk {
