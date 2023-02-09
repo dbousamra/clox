@@ -5,7 +5,7 @@ use crate::{
 
 pub fn print_value(value: &Value) {
     match value {
-        Value::Number(n) => print!("number: {:?}", n),
+        Value::Number(n) => print!("{}", n),
     }
 }
 
